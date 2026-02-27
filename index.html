@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Bolo Magic - Final Pro</title>
+    
+    <link rel="icon" type="image/png" href="favicon.svg">
+    <link rel="apple-touch-icon" href="favicon.svg">
+    
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#6c5ce7">
+
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary: #6c5ce7; --secondary: #00cec9; --accent: #ff7675; --yellow: #fdcb6e; }
+        body { margin: 0; background: linear-gradient(135deg, #6c5ce7, #a29bfe); font-family: 'Quicksand', sans-serif; min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; touch-action: manipulation; }
+        .master-app { width: 100%; max-width: 450px; background: white; border-radius: 40px; padding: 30px; box-shadow: 0 30px 60px rgba(0,0,0,0.3); text-align: center; border-bottom: 10px solid #5244cc; }
+        h1 { font-family: 'Fredoka', sans-serif; color: var(--primary); margin: 0 0 20px 0; font-size: 2.2rem; }
+        .search-bar { display: flex; background: #f0f2f5; padding: 8px; border-radius: 50px; gap: 10px; margin-bottom: 20px; border: 2px solid #eee; }
+        input { flex: 1; border: none; background: none; outline: none; font-size: 1.1rem; font-weight: 700; padding-left: 15px; width: 100%; }
+        .btn { border: none; border-radius: 50px; cursor: pointer; transition: 0.3s; }
+        .btn-search { background: var(--primary); color: white; padding: 10px 25px; font-family: 'Fredoka'; }
+        .btn-mic { background: var(--accent); color: white; width: 45px; height: 45px; font-size: 1.2rem; display: flex; align-items: center; justify-content: center; }
+        #result-card { display: none; animation: popUp 0.4s ease; }
+        @keyframes popUp { from { opacity:0; transform: scale(0.9); } to { opacity:1; transform: scale(1); } }
+        .word-tag { font-family: 'Fredoka'; font-size: 2.8rem; color: #d63031; margin: 0 0 15px 0; text-transform: capitalize; }
+        .box { padding: 15px; border-radius: 20px; margin-bottom: 10px; text-align: left; }
+        .eng-box { background: #f1f2f6; border-left: 8px solid var(--primary); }
+        .hin-box { background: #e8fcfb; border-left: 8px solid var(--secondary); }
+        .label { font-size: 0.7rem; text-transform: uppercase; font-weight: 800; color: #999; }
+        .text { font-size: 1.1rem; color: #2d3436; font-weight: 600; display: block; margin-top: 5px; }
+        
+        <div id="extra-info" class="box extra-box" style="display:none;">
+    <div class="info-item">
+        <span class="label">Similar (पर्यायवाची)</span>
+        <span id="synonyms-list" class="text-small"></span>
+    </div>
+    <div class="info-divider"></div>
+    <div class="info-item">
+        <span class="label">Opposite (विलोम)</span>
+        <span id="antonyms-list" class="text-small"></span>
+    </div>
+</div>
+
+        .speed-control { background: #fff4e1; padding: 15px; border-radius: 20px; margin-top: 15px; border: 2px dashed var(--yellow); }
+        input[type="range"] { width: 100%; cursor: pointer; accent-color: var(--yellow); }
+        .action-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
+        .btn-audio { background: var(--yellow); border: none; padding: 15px; border-radius: 20px; font-weight: 800; cursor: pointer; box-shadow: 0 5px 0 #e1b12c; }
+        .btn-share { background: #55efc4; border: none; padding: 15px; border-radius: 20px; font-weight: 800; cursor: pointer; box-shadow: 0 5px 0 #00b894; color: #1a4d3e; }
+        #loader { color: var(--primary); font-weight: bold; display: none; margin-bottom: 10px; }
+        
+        .extra-box {
+    background: #fff5f5;
+    border-left: 8px solid var(--accent);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.info-item { display: flex; flex-direction: column; }
+.info-divider { height: 1px; background: #eee; margin: 5px 0; }
+.text-small { font-size: 1rem; color: #444; font-weight: 600; margin-top: 3px; }
+b { color: var(--primary); }
+
+    </style>
+</head>
+<body>
+
+    <div class="master-app">
+        <h1>Bolo Magic! 🐼</h1>
+        <div class="search-bar">
+            <button class="btn btn-mic" onclick="startVoice()">🎤</button>
+            <input type="text" id="wordInput" placeholder="Enter word...">
+            <button class="btn btn-search" onclick="findWord()">GO!</button>
+        </div>
+        <div id="loader">Magic is working... ✨</div>
+        <div id="result-card">
+            <h2 id="disp-word" class="word-tag"></h2>
+            <div class="box eng-box"><span class="label">English</span><span id="eng-mean" class="text"></span></div>
+            <div class="box hin-box"><span class="label">Hindi (हिन्दी)</span><span id="hin-mean" class="text"></span></div>
+            <div class="speed-control">
+                <span style="font-size:0.8rem; font-weight:700; color:#b08a00;">🐢 Voice Speed 🐰</span>
+                <input type="range" id="speedRange" min="0.5" max="1.5" step="0.1" value="0.8">
+            </div>
+            <div class="action-btns">
+                <button class="btn-audio" onclick="speakBoth()">🔊 LISTEN</button>
+                <button class="btn-share" onclick="shareWord()">📲 SHARE</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
