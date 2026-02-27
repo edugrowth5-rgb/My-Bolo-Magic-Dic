@@ -28,19 +28,16 @@
         .box { padding: 15px; border-radius: 20px; margin-bottom: 10px; text-align: left; }
         .eng-box { background: #f1f2f6; border-left: 8px solid var(--primary); }
         .hin-box { background: #e8fcfb; border-left: 8px solid var(--secondary); }
+        
+        
+
         .label { font-size: 0.7rem; text-transform: uppercase; font-weight: 800; color: #999; }
         .text { font-size: 1.1rem; color: #2d3436; font-weight: 600; display: block; margin-top: 5px; }
         
-        <div id="extra-info" class="box extra-box" style="display:none;">
-    <div class="info-item">
-        <span class="label">Similar (पर्यायवाची)</span>
-        <span id="synonyms-list" class="text-small"></span>
-    </div>
-    <div class="info-divider"></div>
-    <div class="info-item">
-        <span class="label">Opposite (विलोम)</span>
-        <span id="antonyms-list" class="text-small"></span>
-    </div>
+        <div class="box syn-box" id="extra-info" style="display:none; background: #fff1f0; border-left: 8px solid #ff7675;">
+    <span class="label">Similar & Opposite (पर्याय और विलोम)</span>
+    <p id="synonyms-list" class="text" style="color: #d63031; margin-bottom: 5px;"></p>
+    <p id="antonyms-list" class="text" style="color: #2d3436;"></p>
 </div>
 
         .speed-control { background: #fff4e1; padding: 15px; border-radius: 20px; margin-top: 15px; border: 2px dashed var(--yellow); }
@@ -78,6 +75,20 @@ b { color: var(--primary); }
             <h2 id="disp-word" class="word-tag"></h2>
             <div class="box eng-box"><span class="label">English</span><span id="eng-mean" class="text"></span></div>
             <div class="box hin-box"><span class="label">Hindi (हिन्दी)</span><span id="hin-mean" class="text"></span></div>
+            
+            <div id="extra-info" class="box extra-box" style="display:none;">
+    <div class="info-item">
+        <span class="label">Similar (पर्यायवाची)</span>
+        <span id="synonyms-list" class="text-small"></span>
+    </div>
+    <div class="info-divider"></div>
+    <div class="info-item">
+        <span class="label">Opposite (विलोम)</span>
+        <span id="antonyms-list" class="text-small"></span>
+    </div>
+</div>
+            
+            
             <div class="speed-control">
                 <span style="font-size:0.8rem; font-weight:700; color:#b08a00;">🐢 Voice Speed 🐰</span>
                 <input type="range" id="speedRange" min="0.5" max="1.5" step="0.1" value="0.8">
