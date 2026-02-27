@@ -1,4 +1,4 @@
-const cacheName = 'magic-v1.1';
+const cacheName = 'magic-v1';
 const assets = ['./', './index.html', './app.js', './manifest.json', './favicon.svg'];
 
 self.addEventListener('install', e => {
